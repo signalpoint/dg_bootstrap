@@ -38,6 +38,8 @@ function bootstrap_preprocess_region_container_close($scope, region, data) {
  */
 function bootstrap_form_alter(form, form_state, form_id) {
   try {
+    //dpm('bootstrap_form_alter');
+    //console.log(arguments);
     form.options.attributes['role'] = 'form';
   }
   catch (error) { console.log('bootstrap_form_alter - ' + error); }
