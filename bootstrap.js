@@ -1,47 +1,45 @@
-/**
- * Implements hook_postprocess_page().
- */
-/*function bootstrap_postprocess_page($scope) {
-  try {
-    // @TODO this should probably be called hook_postprocess_content().
-    dpm('bootstrap_postprocess_page');
-    $scope.content = '<div>' + $scope.content + '</div>';
-  }
-  catch (error) { console.log('bootstrap_postprocess_page - ' + error); }
-}*/
-
-/**
- * Implements hook_preprocess_region_container_open().
- */
-function bootstrap_preprocess_region_container_open($scope, region, data) {
-  try {
-    // Put a div before each region.
-    data.region_html += '<div class="content">';
-  }
-  catch (error) { console.log('bootstrap_preprocess_region_container_open - ' + error); }
-}
-
-/**
- * Implements hook_preprocess_region_container_close().
- */
-function bootstrap_preprocess_region_container_close($scope, region, data) {
-  try {
-    // Close our div from hook_preprocess_region_container_open().
-    data.region_html += '</div>';
-  }
-  catch (error) { console.log('bootstrap_preprocess_region_container_close - ' + error); }
-}
-
+dg.modules.bootstrap = new dg.Module();
 
 /**
  * Implements hook_form_alter().
  */
 function bootstrap_form_alter(form, form_state, form_id) {
-  try {
-    //dpm('bootstrap_form_alter');
-    //console.log(arguments);
-    form.options.attributes['role'] = 'form';
-  }
-  catch (error) { console.log('bootstrap_form_alter - ' + error); }
+  return new Promise(function(ok, err) {
+
+    form._attributes['role'] = 'form';
+
+    // Add bootstrap attributes to form elements.
+    for (var name in form) {
+      if (!dg.isFormElement(name, form)) { continue; }
+      var el = form[name];
+      switch (el._type) {
+        case 'actions':
+          for (var _name in el) {
+            if (!dg.isFormElement(name, form)) { continue; }
+            bootstrapFormElementAddAttributes(el[_name]);
+          }
+          break;
+        default:
+          bootstrapFormElementAddAttributes(el);
+          break;
+      }
+    }
+
+    ok();
+  });
 }
 
+function bootstrapFormElementAddAttributes(el) {
+  switch (el._type) {
+    case 'submit':
+      switch (el._button_type) {
+        case 'primary':
+        default:
+          el._attributes['class'].push('btn btn-primary');
+          break;
+      }
+      break;
+    default:
+      break;
+  }
+}

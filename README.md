@@ -1,7 +1,21 @@
 # bootstrap
-The bootstrap module for DrupalGap 2.x Bootstrap Themes
 
-# WARNING
-This module has been deprecated and moved into DrupalGap 2.x core as the
-dg_bootstrap module.
+> The DrupalGap module for Bootstrap.
 
+- http://getbootstrap.com/
+
+## Installation
+
+Include the `bootstrap.js` and `bootstrap.css` module files in the `<head>` of your app's `index.html` file:
+
+```
+<!-- DrupalGap Modules -->
+<script src="modules/contrib/bootstrap/bootstrap.js"></script>
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="" />
+```
+
+You can get the `bootstrap.css` URL for the `href` value here, in the `Latest compiled and minified CSS` section:
+
+http://getbootstrap.com/getting-started/
