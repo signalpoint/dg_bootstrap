@@ -24,6 +24,13 @@ function bootstrap_block_view_alter(element, block) {
       element.menu._attributes['class'].push('nav', 'navbar-nav');
       break;
 
+    // Make the powered by block into a navbar.
+    case 'powered_by':
+      element.list._items.push(dg.l('Bootstrap', 'http://getbootstrap.com'));
+      element.list._items.reverse();
+      element.list._attributes['class'].push('navbar');
+      break;
+
   }
 
 }
