@@ -9,27 +9,15 @@ function bootstrap_block_view_alter(element, block) {
 
     // Make the main menu into a navbar.
     case 'main_menu':
-      var header =
-          '<div class="navbar-header">' +
-          '<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">' +
-          '<span class="sr-only">Toggle navigation</span>' +
-          '<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>' +
-          '</button>' +
-          '<a class="navbar-brand" href="#">' + dg.config('title') + '</a>' +
-          '</div>';
-      element.header = {
-        _markup: header
-      };
       element.menu._weight = 1;
+      element._prefix = '<a class="navbar-brand" href="#">' + dg.config('title') + '</a>';
       element.menu._attributes['class'].push('nav', 'navbar-nav');
       break;
 
+    // Make the authenticated user login block controls into a navbar.
     case 'user_login':
-      if (!dg.currentUser().isAuthenticated()) {
-
-      }
-      else {
-
+      if (dg.currentUser().isAuthenticated()) {
+        element.menu._attributes['class'].push('nav', 'navbar-nav', 'navbar-right');
       }
       break;
 
@@ -118,6 +106,7 @@ dg.modules.bootstrap.formElementAddAttributes = function(el) {
           break;
       }
       break;
+    case 'textarea':
     case 'textfield':
     case 'password':
     case 'select':
