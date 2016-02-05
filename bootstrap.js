@@ -85,6 +85,7 @@ dg.modules.bootstrap.afterBuild = function(form, form_state) {
   // Add bootstrap attributes to form element containers.
   for (var name in form) {
     if (!dg.isFormElement(name, form) || form[name]._type == 'hidden') { continue; }
+    if (!form[name]._attributes) { form[name]._attributes = { 'class': [] }; } // @TODO figure out why this would be null.
     if (!jDrupal.inArray('form-group', form[name]._attributes['class'])) {
       form[name]._attributes['class'].push('form-group');
     }
