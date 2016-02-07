@@ -8,7 +8,7 @@ function bootstrap_blocks_build_alter(blocks) {
   // Turn the main menu into a navbar.
   // @see https://getbootstrap.com/examples/navbar/
   if (blocks.main_menu) {
-    blocks.main_menu._attributes.class.push('navbar-collapse', 'collapse');
+    blocks.main_menu._attributes.class.push('navbar-collapse', 'collapse', 'navbar-left');
     blocks.main_menu._attributes['aria-expanded'] = 'false';
     blocks.main_menu._attributes['style'] = 'height: 1px;';
     blocks.main_menu._prefix = dg.render({
