@@ -1,6 +1,54 @@
 dg.modules.bootstrap = new dg.Module();
 
 /**
+ * Implements hook_regions_build_alter().
+ */
+function bootstrap_blocks_build_alter(blocks) {
+
+  // Turn the main menu into a navbar.
+  // @see https://getbootstrap.com/examples/navbar/
+  if (blocks.main_menu) {
+    blocks.main_menu._attributes.class.push('navbar-collapse', 'collapse');
+    blocks.main_menu._attributes['aria-expanded'] = 'false';
+    blocks.main_menu._attributes['style'] = 'height: 1px;';
+    blocks.main_menu._prefix = dg.render({
+      _theme: 'container',
+      _attributes: {
+        'class': ['navbar-header']
+      },
+      _children: {
+        button: {
+          _theme: 'button',
+          _attributes: {
+            id: blocks.main_menu._attributes.id + '-button',
+            type: 'button',
+            'class': ['navbar-toggle', 'collapsed'],
+            'data-toggle': 'collapse',
+            'data-target': '#main-menu',
+            'aria-expanded': 'false',
+            'aria-controls': 'navbar'
+          },
+          _postRender: [function() {
+            var menu = blocks.main_menu._content.menu;
+            var spans = '';
+            for (var i = 0; i < menu._items.length; i++) {
+              if (i == 0) { spans += '<span class="sr-only">Toggle navigation</span>'; }
+              else { spans += '<span class="icon-bar"></span>'; }
+              spans += '<span></span>';
+            }
+            document.getElementById(blocks.main_menu._attributes.id + '-button').innerHTML = spans;
+          }]
+        },
+        brand: {
+          _markup: '<a class="navbar-brand" href="#">' + dg.config('title') + '</a>'
+        }
+      }
+    });
+  }
+
+}
+
+/**
  * Implements hook_block_view_alter().
  */
 function bootstrap_block_view_alter(element, block) {
@@ -10,7 +58,6 @@ function bootstrap_block_view_alter(element, block) {
     // Make the main menu into a navbar.
     case 'main_menu':
       element.menu._weight = 1;
-      element._prefix = '<a class="navbar-brand" href="#">' + dg.config('title') + '</a>';
       element.menu._attributes['class'].push('nav', 'navbar-nav');
       break;
 
