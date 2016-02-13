@@ -61,11 +61,9 @@ function bootstrap_block_view_alter(element, block) {
       element.menu._attributes['class'].push('nav', 'navbar-nav');
       break;
 
-    // Make the authenticated user login block controls into a navbar.
-    case 'user_login':
-      if (dg.currentUser().isAuthenticated()) {
-        element.menu._attributes['class'].push('nav', 'navbar-nav', 'navbar-right');
-      }
+    // Make the user menu into a navbar.
+    case 'user_menu':
+      element.menu._attributes['class'].push('nav', 'navbar-nav', 'navbar-right');
       break;
 
     // Make the powered by block into a navbar.
@@ -136,7 +134,31 @@ dg.modules.bootstrap.afterBuild = function(form, form_state) {
     if (!jDrupal.inArray('form-group', form[name]._attributes['class'])) {
       form[name]._attributes['class'].push('form-group');
     }
+
+    if (typeof form[name]._children === 'undefined') { continue; }
+
+    // Add bootstrap attributes to form elements.
+    for (var child in form[name]._children) {
+      if (!dg.isFormElement(child, form[name]._children)) { continue; }
+      var el = form[name]._children[child];
+      switch (el._type) {
+        case 'actions':
+          for (var _name in el) {
+            if (!dg.isFormElement(_name, el)) { continue; }
+            dg.modules.bootstrap.formElementAddAttributes(el[_name]);
+          }
+          break;
+        default:
+          dg.modules.bootstrap.formElementAddAttributes(el);
+          break;
+      }
+    }
+
   }
+
+
+
+
 
 };
 
@@ -154,10 +176,11 @@ dg.modules.bootstrap.formElementAddAttributes = function(el) {
           break;
       }
       break;
-    case 'textarea':
-    case 'textfield':
+    case 'number':
     case 'password':
     case 'select':
+    case 'textarea':
+    case 'textfield':
       el._attributes['class'].push('form-control');
       break;
     default:
