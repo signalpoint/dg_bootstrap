@@ -36,7 +36,9 @@ function bootstrap_blocks_build_alter(blocks) {
               else { spans += '<span class="icon-bar"></span>'; }
               spans += '<span></span>';
             }
-            document.getElementById(blocks.main_menu._attributes.id + '-button').innerHTML = spans;
+            var mainMenuButton = document.getElementById(blocks.main_menu._attributes.id + '-button');
+            if (mainMenuButton) { mainMenuButton.innerHTML = spans; }
+
           }]
         },
         brand: {
