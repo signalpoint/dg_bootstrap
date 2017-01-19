@@ -36,9 +36,7 @@ function bootstrap_blocks_build_alter(blocks) {
               else { spans += '<span class="icon-bar"></span>'; }
               spans += '<span></span>';
             }
-            var mainMenuButton = document.getElementById(blocks.main_menu._attributes.id + '-button');
-            if (mainMenuButton) { mainMenuButton.innerHTML = spans; }
-
+            document.getElementById(blocks.main_menu._attributes.id + '-button').innerHTML = spans;
           }]
         },
         brand: {
@@ -131,13 +129,18 @@ dg.modules.bootstrap.afterBuild = function(form, form_state) {
 
   // Add bootstrap attributes to form element containers.
   for (var name in form) {
-    if (!dg.isFormElement(name, form) || form[name]._type == 'hidden') { continue; }
-    if (!form[name]._attributes) { form[name]._attributes = { 'class': [] }; } // @TODO figure out why this would be null.
+    if (!dg.isFormElement(name, form)) { continue; }
+    if (typeof form[name]._children === 'undefined') { continue; }
+
+  //|| form[name]._type == 'hidden'
+
+    // @TODO figure out why this would be null.
+    // UPDATE - because we instantiate a FormElement in dg.getForm(), which most likely means
+    // the FormElement constructor doesn't have default attributes being set.
+    if (!form[name]._attributes) { form[name]._attributes = { 'class': [] }; }
     if (!jDrupal.inArray('form-group', form[name]._attributes['class'])) {
       form[name]._attributes['class'].push('form-group');
     }
-
-    if (typeof form[name]._children === 'undefined') { continue; }
 
     // Add bootstrap attributes to form elements.
     for (var child in form[name]._children) {
@@ -178,6 +181,7 @@ dg.modules.bootstrap.formElementAddAttributes = function(el) {
           break;
       }
       break;
+    case 'email':
     case 'number':
     case 'password':
     case 'select':
