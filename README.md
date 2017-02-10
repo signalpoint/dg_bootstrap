@@ -47,11 +47,6 @@ The Bootstrap files to include in your `<head>` are:
 
 ## Block navigation bar
 
-1. Create a block for our navigation bar
-2. Implement it's `build` handler
-3. Place the block in a region on our theme.
-
-Step 1, create the DrupalGap Block:
 ```
 example.blocks = function() {
   var blocks = {};
@@ -75,11 +70,7 @@ example.blocks = function() {
         var secondary = [];
         if (isAuthenticated) {
           secondary.push(dg.l(dg.t('My account'), 'member/' + dg.currentUser().id()));
-          secondary.push(dg.l(dg.t('Logout'), 'user/logout, {
-            _attributes: {
-              onclick: 'cw_go.logoutClick()'
-            }
-          }));
+          secondary.push(dg.l(dg.t('Logout'), 'user/logout));
         }
       
         // Build the navbar.
@@ -112,4 +103,24 @@ Then to display the navigation bar, you would typically add the `example_navbar`
 ```
 // My bootstrap navbar.
 example_navbar: { },
+```
+
+## navigation bar
+
+We can also quickly render a navigation bar without the overhead of building a block by utilizing `dg.theme()`:
+
+```
+// var primary = @see above.
+// var secondary = @see above.
+var html = dg.theme('bootstrap_navbar', {
+  _logo: dg.theme('image', {
+    _path: 'themes/melvin/images/icon.png',
+    _attributes: {
+      alt: dg.config('title') + ' logo',
+      title: dg.config('title')
+    }
+  }),
+  _primary: primary,
+  _secondary: secondary
+});
 ```
