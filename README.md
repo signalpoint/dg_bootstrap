@@ -42,3 +42,74 @@ The Bootstrap files to include in your `<head>` are:
 - Latest compiled and minified CSS
 - Optional theme (*this really is optional*)
 - Latest compiled and minified JavaScript
+
+### Examples
+
+## Block navigation bar
+
+1. Create a block for our navigation bar
+2. Implement it's `build` handler
+3. Place the block in a region on our theme.
+
+Step 1, create the DrupalGap Block:
+```
+example.blocks = function() {
+  var blocks = {};
+
+  blocks['example_navbar'] = {
+    build: function() {
+      return new Promise(function(ok, err) {
+        var content = {};
+      
+        var isAuthenticated = dg.currentUser().isAuthenticated();
+      
+        // Primary links.
+        var primary = [  ];
+        if (isAuthenticated) {
+          if (dg.currentUser().hasRole('administrator')) {
+            primary.push(dg.l(dg.t('Groups'), 'groups'));
+          }
+        }
+      
+        // Secondary links.
+        var secondary = [];
+        if (isAuthenticated) {
+          secondary.push(dg.l(dg.t('My account'), 'member/' + dg.currentUser().id()));
+          secondary.push(dg.l(dg.t('Logout'), 'user/logout, {
+            _attributes: {
+              onclick: 'cw_go.logoutClick()'
+            }
+          }));
+        }
+      
+        // Build the navbar.
+        content.menu = {
+          _theme: 'bootstrap_navbar',
+          _logo: dg.theme('image', {
+            _path: 'themes/melvin/images/icon.png',
+            _attributes: {
+              alt: dg.config('title') + ' logo',
+              title: dg.config('title')
+            }
+          }),
+          _primary: primary,
+          _secondary: secondary
+        };
+      
+        ok(content);
+        
+      });
+    }
+  };
+
+  return blocks;
+};
+
+```
+
+Then to display the navigation bar, you would typically add the `example_navbar` block to the `header` region of your theme's configuration in the `settings.js` file:
+
+```
+// My bootstrap navbar.
+example_navbar: { },
+```
