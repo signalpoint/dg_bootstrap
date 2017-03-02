@@ -124,3 +124,26 @@ var html = dg.theme('bootstrap_navbar', {
   _secondary: secondary
 });
 ```
+
+## list group
+
+[List group custom content](http://getbootstrap.com/components/#list-group-custom-content) 
+```
+var data = { /* get your data from somewhere */}
+var items = [];
+for (var i = 0; i < data.results.length; i++) {
+  var row = data.results[i];
+  items.push({
+    _text: row.name,
+    _attributes: {
+      href: '#member/' + row.uid
+    }
+  });
+}
+
+var html = dg.theme('bootstrap_item_list', {
+  _items: items,
+  _type: 'div',
+  _itemType: 'a'
+});
+```
