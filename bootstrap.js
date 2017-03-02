@@ -103,10 +103,7 @@ function bootstrap_form_alter(form, form_state, form_id) {
     form._attributes['role'] = 'form';
     form._after_build.push('bootstrap.afterBuild');
 
-    // Add bootstrap attributes to form elements.
-    for (var name in form) {
-      if (!dg.isFormElement(name, form)) { continue; }
-      var el = form[name];
+    var workIt = function(el) {
       switch (el._type) {
         case 'actions':
           for (var _name in el) {
@@ -118,6 +115,21 @@ function bootstrap_form_alter(form, form_state, form_id) {
           dg.modules.bootstrap.formElementAddAttributes(el);
           break;
       }
+    };
+
+    // Add bootstrap attributes to form elements.
+    //console.log(form);
+    for (var name in form) {
+      //if (!dg.isFormElement(name, form)) {
+      //  if (!form.hasOwnProperty(name)) { continue; }
+      //  var child = form[name];
+      //  for (var name2 in child) {
+      //    if (!dg.isFormElement(name2, child)) { continue; }
+      //    workIt(form[name][name2]);
+      //  }
+      //  continue;
+      //}
+      workIt(form[name]);
     }
 
     // Make any specific form alterations.
@@ -204,21 +216,59 @@ dg.modules.bootstrap.formElementAddAttributes = function(el) {
     case 'select':
     case 'textarea':
     case 'textfield':
+    //case 'radios':
       el._attributes['class'].push('form-control');
+      break;
+    case 'radio':
+      //el._attributes['class'].push('radio');
       break;
     default:
       if (el._type == 'autocomplete') {
-        if (!el._text_input) { el._text_input = {}; }
-        if (!el._text_input._attributes) { el._text_input._attributes = {}; }
-        if (!el._text_input._attributes.class) { el._text_input._attributes.class = []; }
-        var classNames = el._text_input._attributes.class;
-        if (typeof classNames === 'string') { classNames = classNames.split(' '); }
-        el._text_input._attributes.class = classNames;
-        el._text_input._attributes.class.push('form-control');
+        bootstrap_autocomplete_init(el);
       }
       break;
   }
 };
+
+function bootstrap_autocomplete_init(el) {
+  if (!el._text_input) { el._text_input = {}; }
+  if (!el._text_input._attributes) { el._text_input._attributes = {}; }
+  if (!el._text_input._attributes.class) { el._text_input._attributes.class = []; }
+  var classNames = el._text_input._attributes.class;
+  if (typeof classNames === 'string') { classNames = classNames.split(' '); }
+  el._text_input._attributes.class = classNames;
+  el._text_input._attributes.class.push('form-control');
+}
+
+dg.theme_bootstrap_autocomplete = function(variables) {
+  bootstrap_autocomplete_init(variables);
+  return dg.theme('autocomplete', variables);
+};
+
+/**
+ * OVERRIDES
+ */
+
+dg.b = function(text, options) {
+  if (!options) { options = {}; }
+  dg.elementAttributesInit(options);
+  var type = options._type ? options._type : 'default';
+  options._attributes.class.push('btn', 'btn-' + type);
+  if (!options._value) { options._value = text; }
+  return dg.theme('button', options);
+};
+
+dg.bl = function(text, path, options) {
+  if (!options) { options = {}; }
+  dg.elementAttributesInit(options);
+  var type = options._type ? options._type : 'link';
+  options._attributes.class.push('btn', 'btn-' + type);
+  return dg.l(text, path, options);
+};
+
+/**
+ * WIDGETS
+ */
 
 /**
  * Returns an html string for a bootstrap navbar menu.
@@ -320,4 +370,52 @@ dg.theme_bootstrap_navbar = function(variables) {
   html += '</div>';
 
   return html;
+};
+
+dg.theme_bootstrap_item_list = function(variables) {
+  if (!jDrupal.inArray('list-group', variables._attributes.class)) {
+    variables._attributes.class.push('list-group');
+  }
+  var items = variables._items ? variables._items : null;
+  if (items) {
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      if (typeof item === 'string') { item = { _text: item }; }
+      if (!item._attributes) { item._attributes = {}; }
+      if (!item._attributes.class) { item._attributes.class = []; }
+      else if (typeof item._attributes.class === 'string') {
+        item._attributes.class = [item._attributes.class];
+      }
+      if (!jDrupal.inArray('list-group-item', item._attributes.class)) {
+        item._attributes.class.push('list-group-item');
+      }
+      variables._items[i] = item;
+    }
+  }
+  return dg.theme('item_list', variables);
+};
+
+/**
+ * Themes a bootstrap panel.
+ * @param variables
+ *  _type {String} default, primary, success, info, warning or danger
+ *  _heading {String}
+ *  _body {String}
+ *  _footer {String}
+ * @returns {string}
+ */
+dg.theme_bootstrap_panel = function(variables) {
+  var type = variables._type ? variables._type : 'default';
+  variables._attributes.class.push('panel', 'panel-' + type);
+  var heading = variables._heading ?
+    '<div class="panel-heading">' + variables._heading + '</div>' : '';
+  var body = variables._body ?
+    '<div class="panel-body">' + variables._body + '</div>' : '';
+  var footer = variables._footer ?
+    '<div class="panel-footer">' + variables._footer + '</div>' : '';
+  return '<div ' + dg.attributes(variables._attributes) + '>' +
+      heading +
+      body +
+      footer +
+  '</div>';
 };
