@@ -147,3 +147,14 @@ var html = dg.theme('bootstrap_item_list', {
   _itemType: 'a'
 });
 ```
+
+## [alerts](https://www.w3schools.com/bootstrap/bootstrap_alerts.asp)
+```
+var infoHtml = dg.theme('message', {
+  _message: dg.t('Hello world')
+});
+var infoHtml = dg.theme('message', {
+  _message: dg.t('Goodbye world'),
+  _type: 'danger'
+});
+```
