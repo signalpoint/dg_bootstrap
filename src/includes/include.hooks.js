@@ -102,7 +102,7 @@ function dg_bootstrap_form_alter(form, form_state, form_id) {
     form._attributes['role'] = 'form';
     form._after_build.push('dg_bootstrap.afterBuild');
 
-    var workIt = function(el) {
+    var addAttrsToElement = function(el) {
       switch (el._type) {
         case 'actions':
           for (var _name in el) {
@@ -119,16 +119,8 @@ function dg_bootstrap_form_alter(form, form_state, form_id) {
     // Add bootstrap attributes to form elements.
     //console.log(form);
     for (var name in form) {
-      //if (!dg.isFormElement(name, form)) {
-      //  if (!form.hasOwnProperty(name)) { continue; }
-      //  var child = form[name];
-      //  for (var name2 in child) {
-      //    if (!dg.isFormElement(name2, child)) { continue; }
-      //    workIt(form[name][name2]);
-      //  }
-      //  continue;
-      //}
-      workIt(form[name]);
+      if (!form.hasOwnProperty(name) || !dg.isFormElement(name, form)) { continue; }
+      addAttrsToElement(form[name]);
     }
 
     // Make any specific form alterations.
