@@ -20,3 +20,6 @@ dg_bootstrap.addBtnClasses = function(variables, type) {
   if (!dg.inArray('btn', classNames)) { classNames.push('btn'); }
   if (!dg.inArray('btn-' + type, classNames)) { classNames.push('btn-' + type); }
 };
+
+// @see widgets.message.js
+//dg_theme.message = function(variables) { /* ... */ };
