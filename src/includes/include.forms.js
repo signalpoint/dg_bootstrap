@@ -16,8 +16,10 @@ dg_bootstrap.afterBuild = function(form, form_state) {
     // UPDATE - because we instantiate a FormElement in dg.getForm(), which most likely means
     // the FormElement constructor doesn't have default attributes being set.
     if (!form[name]._attributes) { form[name]._attributes = { 'class': [] }; }
-    if (!jDrupal.inArray('form-group', form[name]._attributes['class'])) {
-      form[name]._attributes['class'].push('form-group');
+    if (!dg.inArray('form-group', form[name]._attributes['class'])) {
+      var classes = form[name]._attributes['class'];
+      classes.push('form-group');
+      classes.push('form-group-' + dg.killCamelCase(name, '-'));
     }
 
     // Add bootstrap attributes to form elements.
