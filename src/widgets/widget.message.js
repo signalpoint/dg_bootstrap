@@ -18,8 +18,7 @@ dg.theme_message = function(variables) {
       warning: 'warning',
       error: 'danger'
     };
-    var typeClass = map[type] ?  map[type] : null;
-    if (typeClass) { classes.push('alert-' + typeClass); }
+    classes.push('alert-' + (map[type] ?  map[type] : type));
   }
   return '<' + format + ' ' + dg.attrs(variables) + '>' + variables._message + '</' + format + '>';
 };
