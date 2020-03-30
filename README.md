@@ -1,6 +1,6 @@
 # bootstrap
 
-> The DrupalGap module for Bootstrap.
+> The DrupalGap module for Bootstrap 3.
 
 - http://getbootstrap.com/
 
