@@ -73,7 +73,7 @@ function dg_bootstrap_block_view_alter(element, block) {
       break;
 
     // Turn the primary local tasks into nav tabs and place an "active" class
-    // on the appropriate list item if possible.
+    // on the appropriate link if possible.
     case 'primary_local_tasks':
       if (element && element.local_tasks) {
         var tasks = element.local_tasks;
@@ -81,8 +81,13 @@ function dg_bootstrap_block_view_alter(element, block) {
         var currentPath = dg.getPath();
         for (var i = 0; i < tasks._items.length; i++) {
           var item = tasks._items[i];
-          if (item._theme == 'list_item' && item._text._path && currentPath == item._text._path) {
-            item._attributes.class.push('active');
+          if (item._theme == 'list_item') {
+            item._attributes.class.push('nav-item');
+            var link = item._text;
+            link._attributes.class.push('nav-link');
+            if (link._path && currentPath == link._path) {
+              link._attributes.class.push('active');
+            }
           }
         }
       }
