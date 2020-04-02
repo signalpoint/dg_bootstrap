@@ -12,6 +12,7 @@ dg.bl = function(text, path, options) {
   dg.elementAttributesInit(options);
   var type = options._type ? options._type : 'link';
   dg_bootstrap.addBtnClasses(options, type);
+  if (!options._attributes.role) { options._attributes.role = 'button'; }
   return dg.l(text, path, options);
 };
 
