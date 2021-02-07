@@ -1,7 +1,7 @@
 dg.b = function(text, options) {
   if (!options) { options = {}; }
   dg.elementAttributesInit(options);
-  var type = options._type ? options._type : 'default';
+  var type = options._type ? options._type : 'primary';
   dg_bootstrap.addBtnClasses(options, type);
   if (!options._value) { options._value = text; }
   return dg.theme('button', options);
