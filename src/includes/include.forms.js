@@ -16,27 +16,51 @@ dg_bootstrap.afterBuild = function(form, form_state) {
     // UPDATE - because we instantiate a FormElement in dg.getForm(), which most likely means
     // the FormElement constructor doesn't have default attributes being set.
     if (!form[name]._attributes) { form[name]._attributes = { 'class': [] }; }
-    if (!dg.inArray('form-group', form[name]._attributes['class'])) {
-      var classes = form[name]._attributes['class'];
-      classes.push('form-group');
-      classes.push('form-group-' + dg.killCamelCase(name, '-'));
-    }
+
+    // Along the way, watch out for checkboxes and radio buttons.
+    var hasCheckbox = false;
+    var hasRadio = false;
 
     // Add bootstrap attributes to form elements.
     for (var child in form[name]._children) {
+
       if (!dg.isFormElement(child, form[name]._children)) { continue; }
+
       var el = form[name]._children[child];
-      switch (el._type) {
-        case 'actions':
+
+      if (el._type) {
+
+        if (el._type === 'actions') {
           for (var _name in el) {
             if (!dg.isFormElement(_name, el)) { continue; }
             dg_bootstrap.formElementAddAttributes(el[_name]);
           }
-          break;
-        default:
-          dg_bootstrap.formElementAddAttributes(el);
-          break;
+        }
+
       }
+      else {
+
+        dg_bootstrap.formElementAddAttributes(el);
+
+      }
+
+      if (child === 'element') {
+        var elementType = el.element._type;
+        if (elementType === 'checkbox') { hasCheckbox = true; }
+        if (elementType === 'radio') { hasRadio = true; }
+      }
+
+    }
+
+    var containerClass =
+      hasCheckbox || hasRadio ?
+        'form-check' :
+        'form-group';
+
+    if (!dg.inArray(containerClass, form[name]._attributes['class'])) {
+      var classes = form[name]._attributes['class'];
+      classes.push(containerClass);
+      classes.push(containerClass + '-' + dg.killCamelCase(name, '-'));
     }
 
   }
@@ -69,8 +93,17 @@ dg_bootstrap.formElementAddAttributes = function(el) {
     case 'radio':
       //el._attributes['class'].push('radio');
       break;
+    case 'checkbox':
+    case 'radio':
+      el._attributes['class'].push('form-check-input');
+      if (!el._label) {
+        el._label = {};
+        dg.attributesInit(el._label);
+      }
+      el._label._attributes.class.push('form-check-label');
+      break;
     default:
-      if (el._type == 'autocomplete') {
+      if (el._type === 'autocomplete') {
         dg_bootstrap.autocompleteInit(el);
       }
       break;
