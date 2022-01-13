@@ -10,7 +10,7 @@ Include these files in the `<head>` of your app's `index.html` file:
 
 ```
 <!-- DrupalGap Modules -->
-<script src="modules/contrib/bootstrap/bootstrap.js"></script>
+<script src="modules/contrib/dg_bootstrap/dg_bootstrap.min.js"></script>
 
 <!-- DrupalGap Theme -->
 <!-- ## Include a Bootstrap compatible DrupalGap theme's .js file here (e.g. the core burrito theme) ## -->
