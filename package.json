@@ -1,6 +1,6 @@
 {
   "name": "dg_bootstrap",
-  "version": "0.0.0",
+  "version": "8.0.0",
   "description": "A module for DrupalGap 8.",
   "main": "dg_bootstrap.min.js",
   "keywords": [
