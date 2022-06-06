@@ -18,8 +18,16 @@ dg.bl = function(text, path, options) {
 
 dg_bootstrap.addBtnClasses = function(variables, type) {
   var classNames = variables._attributes.class;
-  if (!dg.inArray('btn', classNames)) { classNames.push('btn'); }
-  if (!dg.inArray('btn-' + type, classNames)) { classNames.push('btn-' + type); }
+  var btnTypeClass = 'btn-' + type;
+  var hasBtnClass = dg.inArray('btn', classNames);
+  var hasBtnTypeClass = dg.inArray(btnTypeClass, classNames);
+  var addBtnTypeClass = true;
+  if (type === 'link' && dg_bootstrap.hasOutlineClass(variables)) { addBtnTypeClass = false; }
+  if (!hasBtnClass && !hasBtnTypeClass && addBtnTypeClass) { classNames.unshift('btn', btnTypeClass); }
+  else {
+    if (!hasBtnClass) { classNames.unshift('btn'); }
+    if (!hasBtnTypeClass && addBtnTypeClass) { classNames.push(btnTypeClass); }
+  }
 };
 
 // @see widgets.message.js
