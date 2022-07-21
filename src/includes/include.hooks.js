@@ -149,8 +149,9 @@ function dg_bootstrap_form_alter(form, form_state, form_id) {
  * Implements theme_description().
  */
 function dg_bootstrap_description(vars) {
+  var format = vars._format ? vars._format : 'div';
   var attrs = vars._attributes;
   attrs.class.push('form-text');
   attrs.class.push('text-muted');
-  return '<small ' + dg.attrs(vars) + '>' + vars._description + '</small>';
+  return '<' + format + ' ' + dg.attrs(vars) + '>' + vars._description + '</' + format + '>';
 }
