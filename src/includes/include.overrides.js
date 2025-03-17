@@ -30,5 +30,8 @@ dg_bootstrap.addBtnClasses = function(variables, type) {
   }
 };
 
+dg.show = function(el) { (dg.isString(el) ? dg.qs(el) : el).classList.remove('d-none'); };
+dg.hide = function(el) { (dg.isString(el) ? dg.qs(el) : el).classList.add('d-none'); };
+
 // @see widgets.message.js
 //dg_theme.message = function(variables) { /* ... */ };
