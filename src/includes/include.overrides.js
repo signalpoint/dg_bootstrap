@@ -33,5 +33,11 @@ dg_bootstrap.addBtnClasses = function(variables, type) {
 dg.show = function(el) { (dg.isString(el) ? dg.qs(el) : el).classList.remove('d-none'); };
 dg.hide = function(el) { (dg.isString(el) ? dg.qs(el) : el).classList.add('d-none'); };
 
+dg.isVisible = function(el) {
+  var _el = dg.qs(el);
+  if (_el.classList.contains('d-none') || _el.style.display == 'none') { return false; }
+  return true;
+};
+
 // @see widgets.message.js
 //dg_theme.message = function(variables) { /* ... */ };
